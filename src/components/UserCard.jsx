@@ -1,9 +1,10 @@
 import React from 'react';
 
 const UserCard = props => {
+  const { user } = props;
   return (
     <div>
-      <h1>User Card</h1>
+      <img src={user.avatar_url} alt={user.name} />
     </div>
   );
 };

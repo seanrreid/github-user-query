@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import UserCardList from './components/UserCardList';
+import UserProfile from './components/UserProfile';
 
 class App extends Component {
   state = {
@@ -35,18 +37,21 @@ class App extends Component {
   render() {
     const { userName, users } = this.state;
     return (
-      <>
-        <form onSubmit={this.handleSubmit}>
-          <input
-            type="text"
-            value={userName}
-            onChange={this.handleChange}
-            placeholder="Search for a username..."
-          />
-          <button type="submit">Add User Card</button>
-        </form>
-        <UserCardList users={users} />
-      </>
+      <Router>
+        <Route path="/" exact>
+          <form onSubmit={this.handleSubmit}>
+            <input
+              type="text"
+              value={userName}
+              onChange={this.handleChange}
+              placeholder="Search for a username..."
+            />
+            <button type="submit">Add User Card</button>
+          </form>
+          <UserCardList users={users} />
+        </Route>
+        <Route path="/user/:userName?" component={UserProfile} />
+      </Router>
     );
   }
 }

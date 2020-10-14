@@ -1,59 +1,18 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import UserCardList from './components/UserCardList';
-import UserProfile from './components/UserProfile';
+import React from "react";
+import { BrowserRouter as Router } from "react-router-dom";
 
-class App extends Component {
-  state = {
-    userName: '',
-    users: []
-  };
+import SearchForm from "./components/SearchForm";
 
-  handleSubmit = async event => {
-    event.preventDefault();
+import "./App.css";
 
-    const { userName } = this.state;
-    const response = await fetch(`https://api.github.com/users/${userName}`);
-    const data = await response.json();
-
-    if (data.message !== 'Not Found') {
-      this.setState({
-        users: [...this.state.users, data],
-        userName: ''
-      });
-    } else {
-      this.setState({
-        userName: ''
-      });
-    }
-  };
-
-  handleChange = event => {
-    this.setState({
-      userName: event.target.value
-    });
-  };
-
-  render() {
-    const { userName, users } = this.state;
-    return (
+function App() {
+  return (
+    <div className="App">
       <Router>
-        <Route path="/" exact>
-          <form onSubmit={this.handleSubmit}>
-            <input
-              type="text"
-              value={userName}
-              onChange={this.handleChange}
-              placeholder="Search for a username..."
-            />
-            <button type="submit">Add User Card</button>
-          </form>
-          <UserCardList users={users} />
-        </Route>
-        <Route path="/user/:userName?" component={UserProfile} />
+        <SearchForm />
       </Router>
-    );
-  }
+    </div>
+  );
 }
 
 export default App;

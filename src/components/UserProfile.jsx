@@ -1,36 +1,50 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
-class UserProfile extends Component {
-  state = {
-    repoList: []
-  };
+const UserProfile = (props) => {
+  const { users } = props;
+  const { userName } = useParams();
 
-  async componentDidMount() {
-    const { userName } = this.props.match.params;
-    const response = await fetch(
-      `https://api.github.com/users/${userName}/repos`
-    );
-    const repoList = await response.json();
+  const user = users.find((user) => {
+    return user.login === userName ? user : null;
+  });
 
-    this.setState({
-      repoList
-    });
-  }
+  // Get the repos for the username in the params:
+  const [repoList, setRepos] = useState([]);
 
-  render() {
-    const { repoList } = this.state;
-    return (
-      <>
-        <Link to="/">Home</Link>
-        <ul>
-          {repoList.map(repo => (
-            <li key={repo.id}>{repo.name}</li>
-          ))}
-        </ul>
-      </>
-    );
-  }
-}
+  useEffect(() => {
+    (async function () {
+      const response = await fetch(
+        `https://api.github.com/users/${userName}/repos`
+      );
+      const repoList = await response.json();
+      setRepos(repoList);
+    })();
+  }, [setRepos, userName]);
+
+  return (
+    <>
+      {!!user ? (
+        <>
+          <h2>{user.name}</h2>
+          <h3>{user.company}</h3>
+          <p>{user.bio}</p>
+          <p>Followers: {user.followers}</p>
+          {!!repoList ? (
+            <ul>
+              {repoList.map((repo) => (
+                <li key={repo.id}>{repo.name}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>Loading repos...</p>
+          )}
+        </>
+      ) : (
+        <p>Users array is empty</p>
+      )}
+    </>
+  );
+};
 
 export default UserProfile;

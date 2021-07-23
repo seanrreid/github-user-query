@@ -42,14 +42,14 @@ class App extends Component {
     const { userName, users } = this.state;
     return (
       <>
-        <form>
+        <form onSubmit={this.handleSubmit}>
           <input
             type="text"
             value={userName}
             onChange={(event) => this.handleChange(event.target.value)}
             placeholder="Search for a username..."
           />
-          <button type="button" onClick={this.handleSubmit}>
+          <button type="submit">
             Add User Card
           </button>
         </form>
